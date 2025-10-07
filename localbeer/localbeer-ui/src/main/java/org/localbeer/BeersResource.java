@@ -37,14 +37,14 @@ public class BeersResource {
     public TemplateInstance beersPage() {
         var name = idToken.getClaim("name");
         var email = idToken.getClaim("email");
-        var isAdmin = idToken.getGroups().contains("admin");
+        var canRevealNewBeers = idToken.getGroups().contains("admin") && localBeerApi.areNewBeersAvailable("Bearer " + accessToken.getRawToken());
 
         // calling backend API with the token
         List<LocalBeerApi.Beer> availableBeers = localBeerApi.getStarobrnoBears("Bearer " + accessToken.getRawToken());
 
         return beers.data("name", name)
                 .data("email", email)
-                .data("isAdmin", isAdmin)
+                .data("canRevealNewBeers", canRevealNewBeers)
                 .data("beers", availableBeers);
     }
 
@@ -52,7 +52,7 @@ public class BeersResource {
     @Path("reveal-new")
     @RolesAllowed("admin")
     public Response revealNewBeer() {
-        localBeerApi.revealNewBeer("Bearer " + accessToken.getRawToken());
+        localBeerApi.revealNewBeers("Bearer " + accessToken.getRawToken());
         return Response.status(Response.Status.FOUND).location(URI.create("/beers")).build();
     }
 }

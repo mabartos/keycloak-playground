@@ -4,12 +4,15 @@ import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Path("/api")
@@ -21,6 +24,8 @@ public class BeerStore {
             new Beer("Starobrno Tradiční", 10, "https://webadmin.starobrno.cz/media/nase-pivo/tradicni-product_bg_9-dark.png?width=900&height=0&rmode=min&format=webp&quality=75&token=DvmxIOqQIhf3vJVoOM58yVjtK817mbEoCBiO0GhikkA%3D"))
     );
 
+    private final List<Beer> STAROBRNO_BEERS_UNREVEALED = new ArrayList<>(List.of(new Beer("Starobrno Štatl", 12, "https://webadmin.starobrno.cz/media/nase-pivo/statl_image-content_2.png?width=900&height=0&rmode=min&format=webp&quality=75&token=DvmxIOqQIhf3vJVoOM58yVjtK817mbEoCBiO0GhikkA%3D")));
+
     @GET
     @Path("/beers/starobrno")
     @Authenticated
@@ -30,11 +35,22 @@ public class BeerStore {
 
     @GET
     @Path("/beers/starobrno/reveal")
-    @Authenticated
-    public Beer revealNewStarobrnoBeer() {
-        var statl = new Beer("Starobrno Štatl", 12, "https://webadmin.starobrno.cz/media/nase-pivo/statl_image-content_2.png?width=900&height=0&rmode=min&format=webp&quality=75&token=DvmxIOqQIhf3vJVoOM58yVjtK817mbEoCBiO0GhikkA%3D");
-        STAROBRNO_BEERS.add(statl);
-        return statl;
+    @RolesAllowed("admin")
+    public boolean areNewBeersAvailable() {
+        return !STAROBRNO_BEERS_UNREVEALED.isEmpty();
+    }
+
+    @POST
+    @Path("/beers/starobrno/reveal")
+    @RolesAllowed("admin")
+    public Response revealNewStarobrnoBeers() {
+        if (!areNewBeersAvailable()) {
+            return Response.noContent().build();
+        }
+
+        STAROBRNO_BEERS.addAll(STAROBRNO_BEERS_UNREVEALED);
+        STAROBRNO_BEERS_UNREVEALED.clear();
+        return Response.ok().build();
     }
 
     public record Beer(String name, int degree, String photoUrl) {

@@ -22,7 +22,7 @@
         <p>{beer.degree}°</p>
     </div>
     {/for}
-    {#if isAdmin}
+    {#if canRevealNewBeers}
     <a href="/beers/reveal-new">
         <div class="beer-card" style="background-color:red;">
             <img src="/img/new-beer.jpg" alt="Reveal a new beer">
