@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  padding: 0;
+  align-items:center;
+  background-image: url("/img/starobrno.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  backdrop-filter: brightness(0.1);
+}
+
+.logo{
+    width: 300px;
+}
+
+h1 {
+  font-size: 3em;
+}
+
+a.button{
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 2px solid white;
+  color: white;
+  padding: 0.75em 2em;
+  font-size: 1.2em;
+  border-radius: 0.5em;
+  text-decoration: none;
+  cursor: pointer;
+  width:8rem;
+}
+
+.beers {
+  margin-top: 2em;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.beer-card {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 1em;
+  padding: 1em;
+  width: 180px;
+}
+
+.beer-card img {
+  width: 100%;
+  border-radius: 0.5em;
+}
+
+.beer-card h3 {
+  margin: 0.5em 0 0.2em 0;
+}

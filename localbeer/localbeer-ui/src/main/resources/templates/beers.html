@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Starobrno Beers</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+
+<img class="logo" src="/img/logo.svg" alt="StaroBrno Logo">
+
+<h1>Hello, {name}!</h1>
+<h2>Newsletter activated for email: <strong>{email}</strong></h2>
+
+<h1>Our Beers</h1>
+
+<div class="beers">
+    {#for beer in beers}
+    <div class="beer-card">
+        <img src="{beer.photoUrl}" alt="{beer.name}">
+        <h3>{beer.name}</h3>
+        <p>{beer.degree}°</p>
+    </div>
+    {/for}
+    {#if isAdmin}
+    <a href="/beers/reveal-new">
+        <div class="beer-card" style="background-color:red;">
+            <img src="/img/new-beer.jpg" alt="Reveal a new beer">
+            <h3>Reveal a new beer!</h3>
+            <p>+</p>
+        </div>
+    </a>
+    {/if}
+
+</div>
+<a href="/beers/logout" class="button">Logout</a>
+</body>
+</html>
