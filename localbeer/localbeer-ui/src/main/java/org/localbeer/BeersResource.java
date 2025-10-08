@@ -40,7 +40,7 @@ public class BeersResource {
         var canRevealNewBeers = idToken.getGroups().contains("admin") && localBeerApi.areNewBeersAvailable(getRawToken(accessToken));
 
         // calling backend API with the token
-        List<LocalBeerApi.Beer> availableBeers = localBeerApi.getStarobrnoBears(getRawToken(accessToken));
+        List<LocalBeerApi.Beer> availableBeers = localBeerApi.getStarobrnoBeers(getRawToken(accessToken));
 
         return beers.data("name", name)
                 .data("email", email)
