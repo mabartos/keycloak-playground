@@ -37,10 +37,10 @@ public class BeersResource {
     public TemplateInstance beersPage() {
         var name = idToken.getClaim("name");
         var email = idToken.getClaim("email");
-        var canRevealNewBeers = idToken.getGroups().contains("admin") && localBeerApi.areNewBeersAvailable("Bearer " + accessToken.getRawToken());
+        var canRevealNewBeers = idToken.getGroups().contains("admin") && localBeerApi.areNewBeersAvailable(getRawToken(accessToken));
 
         // calling backend API with the token
-        List<LocalBeerApi.Beer> availableBeers = localBeerApi.getStarobrnoBears("Bearer " + accessToken.getRawToken());
+        List<LocalBeerApi.Beer> availableBeers = localBeerApi.getStarobrnoBears(getRawToken(accessToken));
 
         return beers.data("name", name)
                 .data("email", email)
@@ -52,7 +52,11 @@ public class BeersResource {
     @Path("reveal-new")
     @RolesAllowed("admin")
     public Response revealNewBeer() {
-        localBeerApi.revealNewBeers("Bearer " + accessToken.getRawToken());
+        localBeerApi.revealNewBeers(getRawToken(accessToken));
         return Response.status(Response.Status.FOUND).location(URI.create("/beers")).build();
+    }
+
+    private static String getRawToken(JsonWebToken token) {
+        return "Bearer " + token.getRawToken();
     }
 }
